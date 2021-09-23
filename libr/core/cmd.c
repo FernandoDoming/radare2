@@ -4216,10 +4216,12 @@ next_arroba:
 		if (core->fixedblock) {
 			r_core_block_read (core);
 		}
+#if 0
 		if (ptr[0] == '@') { // @@@@
 			eprintf ("Cannot repeat that much!\n");
 			goto beach;
 		}
+#endif
 		if (ptr[1] == '@') { // @@
 			if (ptr[2] == '@') { // @@@
 				char *rule = ptr + 3;
