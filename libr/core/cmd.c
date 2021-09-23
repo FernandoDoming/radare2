@@ -4216,8 +4216,12 @@ next_arroba:
 		if (core->fixedblock) {
 			r_core_block_read (core);
 		}
-		if (ptr[1] == '@') {
-			if (ptr[2] == '@') {
+		if (ptr[0] == '@') { // @@@@
+			eprintf ("Cannot repeat that much!\n");
+			goto beach;
+		}
+		if (ptr[1] == '@') { // @@
+			if (ptr[2] == '@') { // @@@
 				char *rule = ptr + 3;
 				while (*rule && *rule == ' ') {
 					rule++;
@@ -4701,6 +4705,15 @@ R_API int r_core_cmd_foreach3(RCore *core, const char *cmd, char *each) { // "@@
 			r_core_cmdf (core, "dp %d", origpid);
 		}
 		break;
+	case 0:
+		eprintf ("Nothing to repeat. Check @@@?\n");
+		break;
+	case '@':
+		eprintf ("I can't iterate that much!\n");
+		break;
+	default:
+		eprintf ("Invalid repeat type, Check @@@? for help\n");
+		break;
 	}
 	r_list_free (list);
 	free (glob);
@@ -4848,6 +4861,9 @@ R_API int r_core_cmd_foreach(RCore *core, const char *cmd, char *each) {
 		}
 		free (ostr);
 		return 0;
+	case 0:
+		eprintf ("Nothing to repeat. Check @@?\n");
+		break;
 	case '?': // "@@?"
 		r_core_cmd_help (core, help_msg_at_at);
 		break;
